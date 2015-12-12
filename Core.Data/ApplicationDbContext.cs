@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
+using Core.Data.Mappers;
 
 namespace Core.Data
 {
@@ -19,6 +21,18 @@ namespace Core.Data
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        public virtual void Commit()
+        {
+            base.SaveChanges();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Configurations.Add(new ApplicationUserMapper());
+
+            base.OnModelCreating(modelBuilder);
         }
 
     }

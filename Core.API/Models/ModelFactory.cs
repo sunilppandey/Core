@@ -1,14 +1,12 @@
 ﻿using Core.Data.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http.Routing;
 
 namespace Core.API.Models
 {
-        public class ModelFactory
+    public class ModelFactory
     {
         private UrlHelper _UrlHelper;
         private ApplicationUserManager _AppUserManager;
