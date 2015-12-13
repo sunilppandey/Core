@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using Core.Data.Mappers;
+using Core.Model.Entities;
 
 namespace Core.Data
 {

@@ -170,6 +170,14 @@
       <Project>{04ce23df-0d25-48a5-844f-f01da10481d9}</Project>
       <Name>Core.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj">
+      <Project>{96f44b15-4238-4635-90f7-af70eef44556}</Project>
+      <Name>Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.Model\Core.Model.csproj">
+      <Project>{0c9e075f-0de5-413b-b6d4-436d677f41f1}</Project>
+      <Name>Core.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

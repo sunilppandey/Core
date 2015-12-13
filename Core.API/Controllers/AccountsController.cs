@@ -1,5 +1,7 @@
 ﻿using Core.API.Models;
 using Core.Data.Entities;
+using Core.Data.Repositories;
+using Core.Model.Entities;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -14,11 +16,19 @@ namespace Core.API.Controllers
     [RoutePrefix("api/accounts")]
     public class AccountsController : BaseApiController
     {
+        private readonly ApplicationUserRepository _applicationUserRepository = null;
+
+        public AccountsController()
+        {
+            _applicationUserRepository = new ApplicationUserRepository();
+        }
 
         [Route("users")]
         public IHttpActionResult GetUsers()
         {
-            return Ok(this.AppUserManager.Users.ToList().Select(u => this.TheModelFactory.Create(u)));
+            var users = _applicationUserRepository.GetUsers();
+
+            return Ok(users.Select(u => this.TheModelFactory.Create(u)));
         }
 
         [Route("user/{id:int}", Name = "GetUserById")]
@@ -38,7 +48,7 @@ namespace Core.API.Controllers
         [Route("user/{username}")]
         public async Task<IHttpActionResult> GetUserByName(string username)
         {
-            var user = await this.AppUserManager.FindByNameAsync(username);
+            var user = await _applicationUserRepository.GetUserByName(username);
 
             if (user != null)
             {
@@ -67,7 +77,7 @@ namespace Core.API.Controllers
                 JoinDate = DateTime.Now.Date,
             };
 
-            IdentityResult addUserResult = await this.AppUserManager.CreateAsync(user, createUserModel.Password);
+            IdentityResult addUserResult = await _applicationUserRepository.CreateUser(user, createUserModel.Password);
 
             if (!addUserResult.Succeeded)
             {

@@ -1,4 +1,5 @@
 ﻿using Core.Data.Entities;
+using Core.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

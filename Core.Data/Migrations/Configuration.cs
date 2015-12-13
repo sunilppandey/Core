@@ -1,5 +1,6 @@
 namespace Core.Data.Migrations
 {
+    using Model.Entities;
     using Entities;
     using Microsoft.AspNet.Identity;
     using System;
