@@ -54,10 +54,14 @@
   <ItemGroup>
     <Compile Include="Entities\ApplicationClaimsPrincipal.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
+    <Compile Include="Entities\Book.cs" />
+    <Compile Include="Entities\Client.cs" />
+    <Compile Include="Entities\RefreshToken.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IDateTracking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IApplicationUserRepository.cs" />
+    <Compile Include="Repositories\IBookRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj">

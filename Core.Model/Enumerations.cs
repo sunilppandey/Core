@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Core.Model
 {
-    class Enumerations
+    public class Enumerations
     {
+        public enum ApplicationTypes
+        {
+            JavaScript = 0,
+            NativeConfidential = 1
+        };
     }
 }

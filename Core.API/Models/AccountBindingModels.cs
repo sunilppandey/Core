@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Core.API.Models
 {
@@ -35,5 +36,16 @@ namespace Core.API.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    [DataContract]
+    public class BookModel
+    {
+        [DataMember]
+        public string Title { get; set; }
+        [DataMember]
+        public string Description { get; set; }
+        [DataMember]
+        public string Author { get; set; }
     }
 }

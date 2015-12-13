@@ -74,7 +74,7 @@ namespace Core.API.Controllers
                 FirstName = createUserModel.FirstName,
                 LastName = createUserModel.LastName,
                 Level = 3,
-                JoinDate = DateTime.Now.Date,
+                JoinDate = DateTime.Now.Date
             };
 
             IdentityResult addUserResult = await _applicationUserRepository.CreateUser(user, createUserModel.Password);

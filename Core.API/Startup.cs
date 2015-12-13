@@ -8,6 +8,7 @@ using Core.Data.Entities;
 using System.Net.Http.Formatting;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
+using Core.API.App_Start;
 
 [assembly: OwinStartup(typeof(Core.API.Startup))]
 
@@ -25,9 +26,13 @@ namespace Core.API
 
             ConfigureWebApi(httpConfig);
 
+            Bootstrapper.Run(httpConfig);
+
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             app.UseWebApi(httpConfig);
+
+            //Bootstrapper.Run();
         }
 
         private void ConfigureOAuthTokenGeneration(IAppBuilder app)

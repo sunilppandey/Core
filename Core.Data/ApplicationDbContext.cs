@@ -32,6 +32,7 @@ namespace Core.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new ApplicationUserMapper());
+            modelBuilder.Configurations.Add(new BookMapper());
 
             base.OnModelCreating(modelBuilder);
         }
