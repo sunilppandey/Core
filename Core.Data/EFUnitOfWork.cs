@@ -24,7 +24,7 @@ namespace Core.Data
         /// </summary>
         public void Dispose()
         {
-            DataContextFactory.GetDataContext().SaveChanges();
+            DataContextFactory.GetDataContext().Commit();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Core.Data
         /// <param name="resetAfterCommit">When true, clears out the data context afterwards.</param>
         public void Commit(bool resetAfterCommit)
         {
-            DataContextFactory.GetDataContext().SaveChanges();
+            DataContextFactory.GetDataContext().Commit();
             if (resetAfterCommit)
             {
                 DataContextFactory.Clear();

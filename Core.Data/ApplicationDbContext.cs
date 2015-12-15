@@ -1,13 +1,16 @@
-﻿using Core.Data.Entities;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity;
 using Core.Data.Mappers;
 using Core.Model.Entities;
+using System.Data.Entity.Infrastructure;
+using Core.Model;
+using System.Data.Entity.Validation;
+using System.ComponentModel.DataAnnotations;
+using Core.Infrastructure;
 
 namespace Core.Data
 {
@@ -24,9 +27,47 @@ namespace Core.Data
             return new ApplicationDbContext();
         }
 
-        public virtual void Commit()
+        public virtual int Commit()
         {
-            base.SaveChanges();
+            //base.SaveChanges();
+
+            try
+            {
+                var modified = ChangeTracker.Entries().Where(e => e.State == EntityState.Modified || e.State == EntityState.Added);
+                foreach (DbEntityEntry item in modified)
+                {
+                    var changedOrAddedItem = item.Entity as IDateTracking;
+                    if (changedOrAddedItem != null)
+                    {
+                        if (item.State == EntityState.Added)
+                        {
+                            changedOrAddedItem.CreatedDate = DateTime.Now;
+                        }
+                        changedOrAddedItem.ModifiedDate = DateTime.Now;
+                    }
+                }
+                return base.SaveChanges();
+            }
+            catch (DbEntityValidationException entityException)
+            {
+                var errors = entityException.EntityValidationErrors;
+                var result = new StringBuilder();
+                var allErrors = new List<ValidationResult>();
+                foreach (var error in errors)
+                {
+                    foreach (var validationError in error.ValidationErrors)
+                    {
+                        result.AppendFormat("\r\n  Entity of type {0} has validation error \"{1}\" for property {2}.\r\n", error.Entry.Entity.GetType().ToString(), validationError.ErrorMessage, validationError.PropertyName);
+                        var domainEntity = error.Entry.Entity as DomainEntity<int>;
+                        if (domainEntity != null)
+                        {
+                            result.Append(domainEntity.IsTransient() ? "  This entity was added in this session.\r\n" : string.Format("  The Id of the entity is {0}.\r\n", domainEntity.Id));
+                        }
+                        allErrors.Add(new ValidationResult(validationError.ErrorMessage, new[] { validationError.PropertyName }));
+                    }
+                }
+                throw new ModelValidationException(result.ToString(), entityException, allErrors);
+            }
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

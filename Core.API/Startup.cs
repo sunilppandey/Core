@@ -9,6 +9,8 @@ using System.Net.Http.Formatting;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
 using Core.API.App_Start;
+using Microsoft.Owin.Security.OAuth;
+using Core.Data.Providers;
 
 [assembly: OwinStartup(typeof(Core.API.Startup))]
 
@@ -22,17 +24,38 @@ namespace Core.API
 
             HttpConfiguration httpConfig = new HttpConfiguration();
 
+            ConfigureOAuth(app);
+
             ConfigureOAuthTokenGeneration(app);
 
             ConfigureWebApi(httpConfig);
 
             Bootstrapper.Run(httpConfig);
 
+            //Allow CORS for ASP.NET Web API
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             app.UseWebApi(httpConfig);
 
             //Bootstrapper.Run();
+        }
+
+        public void ConfigureOAuth(IAppBuilder app)
+        {
+            OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            {
+                AllowInsecureHttp = true,
+                TokenEndpointPath = new PathString("/token"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+                Provider = new SimpleAuthorizationServerProvider()
+            };
+
+            //passed this options to the extension method “UseOAuthAuthorizationServer” i.e. add the authentication middleware to the pipeline.
+
+            // Token Generation
+            app.UseOAuthAuthorizationServer(OAuthServerOptions);
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
         }
 
         private void ConfigureOAuthTokenGeneration(IAppBuilder app)

@@ -41,6 +41,13 @@ namespace Core.Data.Repositories
             return user;
         }
 
+        public async Task<ApplicationUser> FindUser(string userName, string password)
+        {
+            var user = await userManager.FindAsync(userName, password);
+
+            return user;
+        }
+
         public void Dispose()
         {
             if (DataContextFactory.GetDataContext() != null)
