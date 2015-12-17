@@ -7,6 +7,8 @@ namespace Core.Data.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using System.Collections.Generic;
+    using Infrastructure;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Core.Data.ApplicationDbContext>
     {
@@ -44,6 +46,41 @@ namespace Core.Data.Migrations
             };
  
             manager.Create(user, "Password@123");
+
+            if(context.Client.Count() <=0)
+            {
+                context.Client.AddRange(BuildClientList());
+                context.SaveChanges();
+            }
+        }
+
+        private static List<Client> BuildClientList()
+        {
+            List<Client> clientList = new List<Client>
+            {
+                new Client
+                {
+                    Id = 1,
+                    Secret = Helper.GetHash("abc@123"),
+                    Name = "AngularJS front-end Application",
+                    ApplicationType =  Model.Enumerations.ApplicationTypes.JavaScript,
+                    Active = true,
+                    RefreshTokenLifeTime = 7200,
+                    AllowedOrigin = "http://localhost:3807"
+                },
+                new Client
+                {
+                    Id = 2,
+                    Secret = Helper.GetHash("123@abc"),
+                    Name = "Console Application",
+                    ApplicationType = Model.Enumerations.ApplicationTypes.NativeConfidential,
+                    Active = true,
+                    RefreshTokenLifeTime = 14400,
+                    AllowedOrigin = "*"
+                }
+            };
+
+            return clientList;
         }
     }
 }

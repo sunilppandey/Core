@@ -27,6 +27,15 @@ namespace Core.Data
             return new ApplicationDbContext();
         }
 
+        /// <summary>
+        /// Provides access to the collection of client in the system.
+        /// </summary>
+        public DbSet<Client> Client { get; set; }
+        /// <summary>
+        /// Provides access to the collection of refreshToken in the system.
+        /// </summary>
+        public DbSet<RefreshToken> RefreshToken { get; set; }
+
         public virtual int Commit()
         {
             //base.SaveChanges();
@@ -74,6 +83,8 @@ namespace Core.Data
         {
             modelBuilder.Configurations.Add(new ApplicationUserMapper());
             modelBuilder.Configurations.Add(new BookMapper());
+            modelBuilder.Configurations.Add(new ClientMapper());
+            modelBuilder.Configurations.Add(new RefreshTokenMapper());
 
             base.OnModelCreating(modelBuilder);
         }

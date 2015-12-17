@@ -59,7 +59,7 @@ namespace Core.API.Controllers
 
         }
 
-        [Route("create")]
+        [Route("register")]
         public async Task<IHttpActionResult> CreateUser(CreateUserBindingModel createUserModel)
         {
             if (!ModelState.IsValid)

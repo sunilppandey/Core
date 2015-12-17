@@ -12,14 +12,14 @@ namespace Core.Data.Mappers
     {
         public ClientMapper()
         {
-            this.ToTable("Client", "Users");
+            ToTable("Client", "Users");
 
-            this.Property(x => x.Secret).IsRequired();
+            Property(x => x.Secret).IsRequired();
 
-            this.Property(x => x.Name).IsRequired();
-            this.Property(x => x.Name).HasMaxLength(100);
+            Property(x => x.Name).IsRequired();
+            Property(x => x.Name).HasMaxLength(100);
 
-            this.Property(x => x.AllowedOrigin).HasMaxLength(100);
+            Property(x => x.AllowedOrigin).HasMaxLength(100);
         }
     }
 }

@@ -18,7 +18,10 @@ namespace Core.Model.Entities
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(Subject))
+            {
+                yield return new ValidationResult("Subject can't be None.", new[] { "Subject" });
+            }
         }
     }
 }

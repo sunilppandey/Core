@@ -3,8 +3,8 @@ using Core.Model.Entities;
 
 namespace Core.Model.Repositories
 {
-    public interface IClientRepository : IRepository<Client, int>
+    public interface IClientRepository : IRepository<Client, string>
     {
-        Client FindClient(int clientId);
+        Client FindClient(string clientId);
     }
 }

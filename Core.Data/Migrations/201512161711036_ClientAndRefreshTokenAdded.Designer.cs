@@ -7,13 +7,13 @@ namespace Core.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class bookadded2 : IMigrationMetadata
+    public sealed partial class ClientAndRefreshTokenAdded : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(bookadded2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ClientAndRefreshTokenAdded));
         
         string IMigrationMetadata.Id
         {
-            get { return "201512141651387_bookadded2"; }
+            get { return "201512161711036_ClientAndRefreshTokenAdded"; }
         }
         
         string IMigrationMetadata.Source

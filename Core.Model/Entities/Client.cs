@@ -19,7 +19,10 @@ namespace Core.Model.Entities
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(Secret))
+            {
+                yield return new ValidationResult("Secret can't be None.", new[] { "Secret" });
+            }
         }
     }
 }
