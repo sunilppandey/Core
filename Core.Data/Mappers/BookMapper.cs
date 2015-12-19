@@ -12,18 +12,20 @@ namespace Core.Data.Mappers
     {
         public BookMapper()
         {
-            this.ToTable("Book", "Users");
+            ToTable("Book", "Users");
 
-            this.Property(x => x.Title).IsRequired();
-            this.Property(x => x.Title).HasMaxLength(100);
+            HasKey(x => x.Id);
+            Property(x => x.Title).IsRequired();
+            
+            Property(x => x.Title).HasMaxLength(100);
 
-            this.Property(x => x.Author).IsRequired();
-            this.Property(x => x.Author).HasMaxLength(100);
+            Property(x => x.Author).IsRequired();
+            Property(x => x.Author).HasMaxLength(100);
 
-            this.Property(x => x.Description).IsRequired();
-            this.Property(x => x.Description).HasMaxLength(100);
+            Property(x => x.Description).IsRequired();
+            Property(x => x.Description).HasMaxLength(100);
 
-            this.Property(x => x.ModifiedDate).IsOptional();
+            Property(x => x.ModifiedDate).IsOptional();
         }
     }
 }

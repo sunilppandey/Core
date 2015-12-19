@@ -8,20 +8,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Model.Entities
 {
-    public class RefreshToken : DomainEntity<int>
+    public class RefreshToken
     {
+        public string Id { get; set; }
         public string Subject { get; set; }
         public string ClientId { get; set; }
         public DateTime IssuedUtc { get; set; }
         public DateTime ExpiresUtc { get; set; }
         public string ProtectedTicket { get; set; }
-
-        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (string.IsNullOrEmpty(Subject))
-            {
-                yield return new ValidationResult("Subject can't be None.", new[] { "Subject" });
-            }
-        }
     }
 }

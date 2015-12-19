@@ -38,14 +38,14 @@ namespace Core.API.Models
         public string ConfirmPassword { get; set; }
     }
 
-    [DataContract]
+//    [DataContract]
     public class BookModel
     {
-        [DataMember]
+        //[DataMember]
         public string Title { get; set; }
-        [DataMember]
+        //[DataMember]
         public string Description { get; set; }
-        [DataMember]
+        //[DataMember]
         public string Author { get; set; }
     }
 }

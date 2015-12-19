@@ -6,6 +6,6 @@ namespace Core.Model.Repositories
 {
     public interface IBookRepository : IRepository<Book, int>
     {
-        IEnumerable<Book> FindByAuthor(string author);
+        Book FindByAuthor(string author);
     }
 }

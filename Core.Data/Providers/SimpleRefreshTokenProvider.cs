@@ -1,4 +1,5 @@
 ﻿using Core.Data.Repositories;
+using Core.Infrastructure;
 using Core.Model.Entities;
 using Microsoft.Owin.Security.Infrastructure;
 using System;
@@ -8,6 +9,13 @@ namespace Core.Data.Providers
 {
     public class SimpleRefreshTokenProvider : IAuthenticationTokenProvider
     {
+        private readonly ApplicationUserRepository _applicationUserRepository = null;
+
+        public SimpleRefreshTokenProvider()
+        {
+            _applicationUserRepository = new ApplicationUserRepository();
+        }
+
         public void Create(AuthenticationTokenCreateContext context)
         {
             throw new NotImplementedException();
@@ -29,31 +37,27 @@ namespace Core.Data.Providers
 
             var refreshTokenId = Guid.NewGuid().ToString("n");
 
-            using (RefreshTokenRepository  _repo = new RefreshTokenRepository())
+            var refreshTokenLifeTime = context.OwinContext.Get<string>("as:clientRefreshTokenLifeTime");
+
+            var token = new RefreshToken()
             {
-                var refreshTokenLifeTime = context.OwinContext.Get<string>("as:clientRefreshTokenLifeTime");
+                Id = Helper.GetHash(refreshTokenId),
+                ClientId = clientid,
+                Subject = context.Ticket.Identity.Name,
+                IssuedUtc = DateTime.UtcNow,
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(refreshTokenLifeTime))
+            };
 
-                var token = new RefreshToken()
-                {
-                    //Id = Helper.GetHash(refreshTokenId),
-                    ClientId = clientid,
-                    Subject = context.Ticket.Identity.Name,
-                    IssuedUtc = DateTime.UtcNow,
-                    ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(refreshTokenLifeTime))
-                };
+            context.Ticket.Properties.IssuedUtc = token.IssuedUtc;
+            context.Ticket.Properties.ExpiresUtc = token.ExpiresUtc;
 
-                context.Ticket.Properties.IssuedUtc = token.IssuedUtc;
-                context.Ticket.Properties.ExpiresUtc = token.ExpiresUtc;
+            token.ProtectedTicket = context.SerializeTicket();
 
-                token.ProtectedTicket = context.SerializeTicket();
+            var result = await _applicationUserRepository.AddRefreshToken(token);
 
-                var result = await _repo.AddRefreshToken(token);
-
-                if (result)
-                {
-                    context.SetToken(refreshTokenId);
-                }
-
+            if (result)
+            {
+                context.SetToken(refreshTokenId);
             }
         }
 
@@ -62,9 +66,21 @@ namespace Core.Data.Providers
             throw new NotImplementedException();
         }
 
-        public Task ReceiveAsync(AuthenticationTokenReceiveContext context)
+        public async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {
-            throw new NotImplementedException();
+            var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
+
+            string hashedTokenId = Helper.GetHash(context.Token);
+
+            var refreshToken = await _applicationUserRepository.FindRefreshToken(hashedTokenId);
+
+            if (refreshToken != null)
+            {
+                //Get protectedTicket from refreshToken class
+                context.DeserializeTicket(refreshToken.ProtectedTicket);
+                var result = await _applicationUserRepository.RemoveRefreshToken(hashedTokenId);
+            }
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Core.API.Mappings;
 using System.Web.Http;
 
 namespace Core.API.App_Start
@@ -12,6 +9,8 @@ namespace Core.API.App_Start
         {
             // Configure Autofac
             AutofacWebapiConfig.Initialize(httpConfig);
+            //Configure AutoMapper
+            AutoMapperConfiguration.Configure();
         }
     }
 }

@@ -3,14 +3,9 @@ using Core.API.Models;
 using Core.Infrastructure;
 using Core.Model.Entities;
 using Core.Model.Repositories;
-using Microsoft.AspNet.Identity;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Core.API.Controllers
@@ -30,7 +25,7 @@ namespace Core.API.Controllers
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("books")]
         public HttpResponseMessage GetBooks()
         {
@@ -87,6 +82,21 @@ namespace Core.API.Controllers
             {
 
             }
+        }
+
+        [Route("findByAuthor/{author}")]
+        public HttpResponseMessage FindByAuthor(string author)
+        {
+            HttpResponseMessage response = null;
+
+            var books = _bookRepository.FindByAuthor(author);
+
+            BookModel bookVM = Mapper.Map<BookModel>(books);
+            //Mapper.Map(books, bookVM);
+
+            response = Request.CreateResponse(HttpStatusCode.OK, bookVM);
+
+            return response;
         }
     }
 }

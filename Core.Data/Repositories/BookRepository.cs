@@ -15,9 +15,9 @@ namespace Core.Data.Repositories
         /// </summary>
         /// <param name="author">The author name that the system should search for.</param>
         /// <returns>An IEnumerable of Book with the matching books.</returns>
-        public IEnumerable<Book> FindByAuthor(string author)
+        public Book FindByAuthor(string author)
         {
-            return DataContextFactory.GetDataContext().Set<Book>().Where(x => x.Author == author);
+            return DataContextFactory.GetDataContext().Set<Book>().Where(x => x.Author == author).FirstOrDefault();
         }
     }
 }

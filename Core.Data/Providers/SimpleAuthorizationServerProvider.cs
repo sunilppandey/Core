@@ -16,11 +16,12 @@ namespace Core.Data.Providers
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         //ApplicationUserRepository _applicationUserRepository;
+        private readonly ApplicationUserRepository _applicationUserRepository = null;
 
-        //public SimpleAuthorizationServerProvider(ApplicationUserRepository applicationUserRepository)
-        //{
-        //    _applicationUserRepository = applicationUserRepository;
-        //}
+        public SimpleAuthorizationServerProvider()
+        {
+            _applicationUserRepository = new ApplicationUserRepository();
+        }
 
         /// <summary>
         /// Validating the client information
@@ -48,10 +49,10 @@ namespace Core.Data.Providers
                 return Task.FromResult<object>(null);
             }
 
-            using (ClientRepository _repo = new ClientRepository())
-            {
-                client = _repo.FindClient(context.ClientId);
-            }
+            //using (ClientRepository _repo = new ClientRepository())
+           // {
+                client = _applicationUserRepository.FindClient(context.ClientId);
+           // }
 
             if (client == null)
             {
@@ -103,15 +104,12 @@ namespace Core.Data.Providers
             // allow CORS on token middleware provider
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-            using (ApplicationUserRepository _applicationUserRepository = new ApplicationUserRepository())
-            {
-                ApplicationUser user = await _applicationUserRepository.FindUser(context.UserName, context.Password);
+            ApplicationUser user = await _applicationUserRepository.FindUser(context.UserName, context.Password);
 
-                if (user == null)
-                {
-                    context.SetError("invalid_grant", "The user name or password is incorrect");
-                    return;
-                }
+            if (user == null)
+            {
+                context.SetError("invalid_grant", "The user name or password is incorrect");
+                return;
             }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
@@ -141,6 +139,27 @@ namespace Core.Data.Providers
             {
                 context.AdditionalResponseParameters.Add(property.Key, property.Value);
             }
+
+            return Task.FromResult<object>(null);
+        }
+
+        public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
+        {
+            var originalClient = context.Ticket.Properties.Dictionary["as:client_id"];
+            var currentClient = context.ClientId;
+
+            if (originalClient != currentClient)
+            {
+                context.SetError("invalid_clientId", "Refresh token is issued to a different clientId.");
+                return Task.FromResult<object>(null);
+            }
+
+            // Change auth ticket for refresh token requests
+            var newIdentity = new ClaimsIdentity(context.Ticket.Identity);
+            newIdentity.AddClaim(new Claim("newClaim", "newValue"));
+
+            var newTicket = new AuthenticationTicket(newIdentity, context.Ticket.Properties);
+            context.Validated(newTicket);
 
             return Task.FromResult<object>(null);
         }

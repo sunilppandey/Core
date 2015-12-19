@@ -14,6 +14,7 @@ namespace Core.Data.Mappers
         {
             ToTable("Client", "Users");
 
+            Property(x => x.Id).IsRequired();
             Property(x => x.Secret).IsRequired();
 
             Property(x => x.Name).IsRequired();
