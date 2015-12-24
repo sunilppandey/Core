@@ -1,4 +1,4 @@
-﻿var app = angular.module('CoreAuthApp', ['ngRoute', 'LocalStorageModule', 'angular-loading-bar']);
+﻿var app = angular.module('coreAuthApp', ['ngRoute', 'LocalStorageModule', 'angular-loading-bar']);
 
 app.config(function ($routeProvider) {
 
@@ -17,12 +17,28 @@ app.config(function ($routeProvider) {
         templateUrl: "/app/views/signup.html"
     });
 
-    $routeProvider.when("/orders", {
-        controller: "ordersController",
+    $routeProvider.when("/books", {
+        controller: "booksController",
         templateUrl: "/app/views/books.html"
     });
 
+    $routeProvider.when("/refresh", {
+        controller: "refreshController",
+        templateUrl: "/app/views/refresh.html"
+    });
+
+    $routeProvider.when("/tokens", {
+        controller: "tokensManagerController",
+        templateUrl: "/app/views/tokens.html"
+    });
+
     $routeProvider.otherwise({ redirectTo: "/home" });
+});
+
+var serviceBase = 'http://localhost:3807/';
+app.constant('ngAuthSettings', {
+    apiServiceBaseUri: serviceBase,
+    clientId: 'coreAuthApp'
 });
 
 app.run(['authService', function (authService) {

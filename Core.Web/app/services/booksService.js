@@ -1,7 +1,8 @@
 ﻿'use strict';
-app.factory('booksService', ['$http', function ($http) {
+app.factory('booksService', ['$http', 'ngAuthSettings', function ($http, ngAuthSettings) {
 
-    var serviceBase = 'http://localhost:3807/';
+    var serviceBase = ngAuthSettings.apiServiceBaseUri;
+
     var booksServiceFactory = {};
 
     var _getBooks = function () {
@@ -11,8 +12,8 @@ app.factory('booksService', ['$http', function ($http) {
         });
     };
 
-    ordersServiceFactory.getBooks = _getBooks;
+    booksServiceFactory.getBooks = _getBooks;
 
-    return ordersServiceFactory;
+    return booksServiceFactory;
 
 }]);

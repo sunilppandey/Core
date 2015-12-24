@@ -1,194 +1,77 @@
 ﻿<!DOCTYPE html>
-<!--[if IE 9 ]><html class="ie ie9" lang="en" class="no-js"> <![endif]-->
-<!--[if !(IE)]><!-->
-<html lang="en" class="no-js" data-ng-app="CoreAuthApp">
-<!--<![endif]-->
+<html data-ng-app="coreAuthApp">
 <head>
-    <!-- META SECTION -->
-    <meta name="keywords" content="angularjs,SPA,Single Page Application,bootstrap,bootstrap ui,tutorial,JS framework,todo,todo api,api,web api,Sunil Pandey" />
-    <meta name="description" content="SPA built using angularjs, this app integrates with todo APIs, back end built using Asp.net web api,creatd by Sunil Pandey" />
     <meta content="IE=edge, chrome=1" http-equiv="X-UA-Compatible" />
-    <title>SMS</title>
-    <link rel="shortcut icon" href="favicon.ico" />
-    <!-- END META SECTION -->
-
-    <!-- CSS -->
-    <!--<link href="content/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="content/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="content/css/main.css" rel="stylesheet" type="text/css">
-    <link href="content/css/toaster.css" rel="stylesheet" />
-    <link href="content/css/loading-bar.min.css" rel="stylesheet" />
-    <link href="content/css/site.css" rel="stylesheet" />-->
+    <title>AngularJS Authentication</title>
+    <link href="content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="content/css/site.css" rel="stylesheet" />
+    <link href="content/css/loading-bar.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <link rel="stylesheet" type="text/css" id="theme" href="css/theme-default.css" />
 </head>
 <body>
-    <!-- WRAPPER -->
-    <div class="wrapper">
-        <!-- TOP BAR -->
-        <top-bar></top-bar>
-        <!-- /top -->
-        <!-- BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
-        <div class="bottom">
-            <div class="container">
-                <div class="row">
-                    <!-- left sidebar -->
-                    <side-bar></side-bar>
-                    <!-- end left sidebar -->
-                    <!-- top general alert -->
-                    <!-- end top general alert -->
-                    <!-- content-wrapper -->
-                    <div class="col-md-10 content-wrapper">
-                        <!-- main -->
-                        <div class="content">
-                            <main-header></main-header>
-                            <div class="main-content" data-ng-view="">
-
-                            </div>
-                            <!-- /main-content -->
-                        </div>
-                        <!-- /main -->
-                    </div>
-                    <!-- /content-wrapper -->
-                </div>
-                <!-- /row -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" data-ng-controller="indexController">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="btn btn-success navbar-toggle" data-ng-click="navbarExpanded = !navbarExpanded">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+                <a class="navbar-brand" href="#/">Home</a>
             </div>
-            <!-- /container -->
-        </div>
-        <!-- END BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
-    </div>
-    <!-- /wrapper -->
-    <!-- FOOTER -->
-    <footer class="footer">
-        Created by Sunil Pandey. Twitter: <a href="http://twitter.com/sunilppandey" target="_blank">@sunilppandey</a>
-        Sunil Pandey Blog: <a href="http://kleintechnik.blogspot.in/" target="_blank">kleintechnik.blogspot.in</a>
-        &copy; 2014-2015 kleintechnik
-    </footer>
-    <!-- END FOOTER -->
-    <!-- STYLE SWITCHER -->
-    <!--<div class="del-style-switcher">
-        <div class="del-switcher-toggle toggle-hide"></div>
-        <form>
-            <section class="del-section del-section-skin">
-                <h5 class="del-switcher-header">Choose Skins:</h5>
-                <ul>
-                    <li><a href="#" title="Slate Gray" class="switch-skin slategray" data-skin="assets/css/skins/slategray.css">Slate Gray</a></li>
-                    <li><a href="#" title="Dark Blue" class="switch-skin darkblue" data-skin="assets/css/skins/darkblue.css">Dark Blue</a></li>
-                    <li><a href="#" title="Dark Brown" class="switch-skin darkbrown" data-skin="assets/css/skins/darkbrown.css">Dark Brown</a></li>
-                    <li><a href="#" title="Light Green" class="switch-skin lightgreen" data-skin="assets/css/skins/lightgreen.css">Light Green</a></li>
-                    <li><a href="#" title="Orange" class="switch-skin orange" data-skin="assets/css/skins/orange.css">Orange</a></li>
-                    <li><a href="#" title="Red" class="switch-skin red" data-skin="assets/css/skins/red.css">Red</a></li>
-                    <li><a href="#" title="Teal" class="switch-skin teal" data-skin="assets/css/skins/teal.css">Teal</a></li>
-                    <li><a href="#" title="Yellow" class="switch-skin yellow" data-skin="assets/css/skins/yellow.css">Yellow</a></li>
+            <div class="collapse navbar-collapse" data-collapse="!navbarExpanded">
+                <ul class="nav navbar-nav navbar-right">
+                    <li data-ng-hide="!authentication.isAuth"><a href="#">Welcome {{authentication.userName}}</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a href="#/books">My Books</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a href="#/refresh">Refresh Token</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a href="" data-ng-click="logOut()">Logout</a></li>
+                    <li data-ng-hide="authentication.isAuth"> <a href="#/login">Login</a></li>
+                    <li data-ng-hide="authentication.isAuth"> <a href="#/signup">Sign Up</a></li>
                 </ul>
-                <button type="button" class="switch-skin-full fulldark" data-skin="assets/css/skins/fulldark.css">Full Dark</button>
-                <button type="button" class="switch-skin-full fullbright" data-skin="assets/css/skins/fullbright.css">Full Bright</button>
-            </section>
-            <label class="fancy-checkbox"><input type="checkbox" id="fixed-top-nav"><span>Fixed Top Navigation</span></label>
-            <p><a href="#" title="Reset Style" class="del-reset-style">Reset Style</a></p>
-        </form>
-    </div>-->
-    <!-- END STYLE SWITCHER -->
-    <!--<div id="page">
-        <header class="container" data-ng-controller="navigationController">
-            <div id="menu" class="navbar navbar-default">
-                <div class="navbar-header">
-                    <button class="btn btn-success navbar-toggle" data-ng-click="navbarExpanded = !navbarExpanded">
-                        <span class="glyphicon glyphicon-chevron-down"></span>
-                    </button>
-                    <div id="logo">
-                        <a href='#/'>
-                            <h4>Explore Foursquare</h4>
-                        </a>
-                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <div class="page-header text-center">
+                <h1>AngularJS Authentication</h1>
+            </div>
+            <p>This single page application is built using AngularJS, it is using OAuth bearer token authentication, ASP.NET Web API 2, OWIN middleware, and ASP.NET Identity to generate tokens and register users.</p>
+        </div>
+    </div>
+    <div class="container">
+        <div data-ng-view="">
+        </div>
+    </div>
+    <hr />
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="text-muted">Created by Taiseer Joudeh. Twitter: <a target="_blank" href="http://twitter.com/tjoudeh">@tjoudeh</a></p>
                 </div>
-                <div class="navbar-collapse collapse" data-collapse="!navbarExpanded">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li data-ng-class="{'active':isActive('/explore')}"><a href="#/explore">Explore</a></li>
-                        <li data-ng-class="{'active':isActive('/places')}"><a href="#/places">My Places</a></li>
-                        <li data-ng-class="{'active':isActive('/about')}"><a href="#/about">About</a></li>
-                    </ul>
+                <div class="col-md-6">
+                    <p class="text-muted">Taiseer Joudeh Blog: <a target="_blank" href="http://bitoftech.net">bitoftech.net</a></p>
                 </div>
             </div>
-        </header>
-        <section id="body" class="container">
-            <div data-ng-view=""></div>
-        </section>
-        <hr />
-        <footer class="container">
-            <p>Created by Sunil Pandey. Twitter: <a target="_blank" href="http://twitter.com/sunilppandey">@sunilppandey</a></p>
-            <p>Sunil Pandey Blog: <a target="_blank" href="http://kleintechnik.blogspot.in/">kleintechnik.blogspot.in/</a></p>
-        </footer>
-
-    </div>-->
-    
-    <!-- START SCRIPTS -->
-    <!-- START PLUGINS -->
-    <script type="text/javascript" src="scripts/jquery-2.1.4.js"></script>
-    <script src="scripts/jquery-ui.min.js"></script>
-    <script src="scripts/bootstrap.js"></script>
-    <!-- END PLUGINS -->
-    <!-- START THIS PAGE PLUGINS-->
-    <script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>
-    <script src="scripts/plugins/jquery.mCustomScrollbar.min.js"></script>
-    <script src="scripts/plugins/scrolltopcontrol.js"></script>
-
-    <script src="scripts/plugins/bootstrap-datepicker.js"></script>
-    <!--<script type="text/javascript" src="js/plugins/morris/raphael-min.js"></script>
-    <script type="text/javascript" src="js/plugins/morris/morris.min.js"></script>
-    <script type="text/javascript" src="js/plugins/rickshaw/d3.v3.js"></script>
-    <script type="text/javascript" src="js/plugins/rickshaw/rickshaw.min.js"></script>
-    <script type='text/javascript' src='js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
-    <script type='text/javascript' src='js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js'></script>
-    <script type="text/javascript" src="js/plugins/owl/owl.carousel.min.js"></script>-->
-
-    <!--<script type="text/javascript" src="js/plugins/moment.min.js"></script>
-    <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>-->
-    <!-- END THIS PAGE PLUGINS-->
-    <!-- START TEMPLATE -->
-    <script type="text/javascript" src="js/settings.js"></script>
-    <script type="text/javascript" src="js/plugins.js"></script>
-    <script type="text/javascript" src="js/actions.js"></script>
-    <script type="text/javascript" src="js/demo_dashboard.js"></script>
-    <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->
-
-    <!--Mine Script-->
-    <script src="scripts/angular.js"></script>
-    <script src="scripts/angular-route.js"></script>
-    <script src="scripts/angular-resource.js"></script>
-    <script src="scripts/angular-animate.js"></script>
-    <script src="scripts/bootstrap.js"></script>
-    <!--<script src="scripts/modernizr.js"></script>-->
-    <!--<script src="scripts/ui-bootstrap-tpls-0.14.3.js"></script>
-
-    <script src="scripts/toaster.js"></script>
+        </div>
+    </div>
+    <!-- 3rd party libraries -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
     <script src="scripts/angular-local-storage.min.js"></script>
     <script src="scripts/loading-bar.min.js"></script>
-
     <!-- Load app main script -->
     <script src="app/app.js"></script>
-
     <!-- Load services -->
     <script src="app/services/authInterceptorService.js"></script>
     <script src="app/services/authService.js"></script>
     <script src="app/services/booksService.js"></script>
-
     <!-- Load controllers -->
     <script src="app/controllers/indexController.js"></script>
     <script src="app/controllers/homeController.js"></script>
     <script src="app/controllers/loginController.js"></script>
     <script src="app/controllers/signupController.js"></script>
     <script src="app/controllers/booksController.js"></script>
-    <script src="app/controllers/navigationController.js"></script>
-    <script src="app/controllers/aboutController.js"></script>
-
-    <!-- Load custom filters -->
-    <!--<script src="app/filters/placeNameCategoryFilter.js"></script>-->
-
-    <!-- Load custom directives -->
-    <!--<script src="app/directives/fsUnique.js"></script>-->
-    <script src="app/directives/sideBar.js"></script>
-    <script src="app/directives/topBar.js"></script>
+    <script src="app/controllers/refreshController.js"></script>
+    <script src="app/controllers/tokensManagerController.js"></script>
 </body>
 </html>

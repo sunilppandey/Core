@@ -25,7 +25,7 @@ namespace Core.API.Controllers
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("books")]
         public HttpResponseMessage GetBooks()
         {

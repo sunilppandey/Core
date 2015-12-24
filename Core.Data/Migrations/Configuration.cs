@@ -60,7 +60,7 @@ namespace Core.Data.Migrations
             {
                 new Client
                 {
-                    Id = "ngAuthApp",
+                    Id = "coreAuthApp",
                     Secret = Helper.GetHash("abc@123"),
                     Name = "AngularJS front-end Application",
                     ApplicationType =  Model.Enumerations.ApplicationTypes.JavaScript,
